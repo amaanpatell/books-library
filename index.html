@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/3c5f2094f5.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet">
+    <title>Books Library</title>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <h1>Books Library</h1>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search by title ">
+                <button id="search-button"><i class="fa-solid fa-magnifying-glass fa-lg"
+                        style="color: #FAFAFA;"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="controls">
+                <div class="view-controls">
+                    <button id="grid-view" class="active"><i class="fa-solid fa-table-cells"
+                            style="color: #FAFAFA;"></i> Grid</button>
+                    <button id="list-view"><i class="fa-solid fa-list-ul" style="color: #FAFAFA;"></i> List</button>
+                </div>
+                <div class="sort-controls">
+                    <label for="sort-select">Sort by:
+                        <select id="sort-select">
+                            <option value="default">Default</option>
+                            <option value="category-computers">Category: Computers</option>
+                            <option value="category-business">Category: Business</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <div id="books-container" class="grid-view">
+                <!-- Books will be displayed here -->
+            </div>
+
+            <div id="page-navigation">
+                <!-- page-navigation will be added here -->
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Books Library. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="./script.js"></script>
+</body>
+</html>
