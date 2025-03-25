@@ -14,13 +14,15 @@ const booksPerPage = 9; // Number of books to show per page
 async function fetchBooks() {
   const url =
     "https://api.freeapi.app/api/v1/public/books?page=1&limit=20&inc=kind%252Cid%252Cetag%252CvolumeInfo&query=tech";
-
+  const options = { method: "GET", headers: { accept: "application/json" } };
   try {
     const response = await fetch(url);
     const data = await response.json();
 
     if (data.data && data.data.data) {
-      books = data.data.data; 
+      books = data.data.data;
+      console.log(books);
+      
       renderBooks();
     } else {
       booksContainer.innerHTML = '<div class="error">No books found</div>';
@@ -39,36 +41,34 @@ function renderBooks() {
   const paginatedBooks = displayedBooks.slice(startIndex, endIndex); // Get books for the current page
 
   paginatedBooks.forEach((book) => {
-    const volumeInfo = book.volumeInfo; // get book details
-    const title = volumeInfo.title;
-    const authors = volumeInfo.authors;
-    const thumbnail = volumeInfo.imageLinks.thumbnail 
-    const publishedDate = volumeInfo.publishedDate;
-    const categories = volumeInfo.categories;
+    const { title, authors, imageLinks, publishedDate, categories, infoLink } =
+      book.volumeInfo; // get book details
 
     const bookElement = document.createElement("div");
     bookElement.className = "book-item";
 
-    if (currentView === "grid") {  // if grid view
+    if (currentView === "grid") {
+      // if grid view
       bookElement.innerHTML = `
-        <div class="book-cover">
-            <img src="${thumbnail}" alt="${title}">
+        <div class="book-cover"> 
+            <a href="${infoLink}" target="_blank"> <img src="${imageLinks.thumbnail}" alt="${title}"> </a>
         </div>
         <div class="book-info">
-            <h3 class="book-title">${title}</h3>
+            <a href="${infoLink}" target="_blank"> <h3 class="book-title">${title}</h3> </a>
             <p class="book-author">By: ${authors}</p>
             <p class="book-category"><i class="fa-solid fa-tag"></i> ${categories}</p>
             <p class="book-date">Published: ${publishedDate}</p>
         </div>
       `;
-    } else { // if list view
+    } else {
+      // if list view
       bookElement.innerHTML = `
         <div class="flex-layout">
             <div class="book-cover-list">
-                <img src="${thumbnail}" alt="${title}">
+              <a href="${infoLink}" target="_blank"> <img src="${imageLinks.thumbnail}" alt="${title}"> </a>
             </div>
             <div class="book-info-list">
-                <h3 class="book-title">${title}</h3>
+                <a href="${infoLink}" target="_blank"> <h3 class="book-title">${title}</h3> </a>
                 <p class="book-author">${authors}</p>
             </div>
             <div class="book-metadata-list">
@@ -83,22 +83,30 @@ function renderBooks() {
   });
 
   // Pagination controls
-  const totalPages = Math.ceil((filteredBooks.length || books.length) / booksPerPage); // find total pages
-  const pageNav = document.getElementById('page-navigation');
+  const totalPages = Math.ceil(
+    (filteredBooks.length || books.length) / booksPerPage
+  ); // find total pages
+  const pageNav = document.getElementById("page-navigation");
 
   pageNav.innerHTML = `
-    <button class="page-btn" ${currentPage === 1 ? 'disabled' : ''} onclick="changePage(${currentPage - 1})">
+    <button class="page-btn" ${
+      currentPage === 1 ? "disabled" : ""
+    } onclick="changePage(${currentPage - 1})">
       <i class="fa-solid fa-chevron-left"></i>
     </button>
     <span>Page ${currentPage} of ${totalPages}</span>
-    <button class="page-btn" ${currentPage === totalPages ? 'disabled' : ''} onclick="changePage(${currentPage + 1})">
+    <button class="page-btn" ${
+      currentPage === totalPages ? "disabled" : ""
+    } onclick="changePage(${currentPage + 1})">
       <i class="fa-solid fa-chevron-right"></i>
     </button>
   `;
 }
 
 function changePage(page) {
-  const totalPages = Math.ceil((filteredBooks.length || books.length) / booksPerPage);
+  const totalPages = Math.ceil(
+    (filteredBooks.length || books.length) / booksPerPage
+  );
   if (page >= 1 && page <= totalPages) {
     currentPage = page;
     renderBooks();
@@ -109,8 +117,10 @@ function searchBooks() {
   const searchTerm = searchInput.value.toLowerCase().trim();
   filteredBooks = books.filter((book) => {
     const title = book.volumeInfo.title.toLowerCase();
-    const authors = book.volumeInfo.authors ? book.volumeInfo.authors.join(', ').toLowerCase() : '';
-    return title.includes(searchTerm) || authors.includes(searchTerm);  // check if book title or author matches
+    const authors = book.volumeInfo.authors
+      ? book.volumeInfo.authors.join(", ").toLowerCase()
+      : "";
+    return title.includes(searchTerm) || authors.includes(searchTerm); // check if book title or author matches
   });
   renderBooks();
 }
@@ -139,7 +149,6 @@ searchInput.addEventListener("keyup", (e) => {
 });
 
 sortSelect.addEventListener("change", sortBooks);
-
 
 // Toggle between grid and list view
 gridViewButton.addEventListener("click", () => {

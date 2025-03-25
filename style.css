@@ -129,10 +129,6 @@ footer {
 .book-cover {
     height: 240px;
     overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #27272A;
 }
 
 .book-cover img {
@@ -148,6 +144,11 @@ footer {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+}
+
+.book-info a{
+    text-decoration: none;
+    color: #FAFAFA;
 }
 
 .book-title {
@@ -220,6 +221,11 @@ footer {
 
 .list-view .book-info-list {
     flex-grow: 1;
+}
+
+.list-view .book-info-list a {
+    text-decoration: none;
+    color: #FAFAFA;
 }
 
 .list-view .book-title {
